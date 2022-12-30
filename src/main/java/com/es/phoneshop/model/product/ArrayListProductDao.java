@@ -53,7 +53,7 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public void delete(Long id) {
         synchronized (lock){
-            products.removeIf(product -> id.equals(product.getId()));
+            products.removeIf(product -> id != null && id.equals(product.getId()));
         }
     }
 
