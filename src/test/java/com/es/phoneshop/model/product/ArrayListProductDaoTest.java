@@ -17,15 +17,13 @@ public class ArrayListProductDaoTest
     public void setup() {
         productDao = new ArrayListProductDao();
     }
-    @Test
+    @Test (expected = NoSuchElementException.class)
     public void testGetProducts(){
         Currency currency = Currency.getInstance("USD");
         Product product = new Product("test", "HTC EVO Shift 4G", new BigDecimal(320), currency, 3, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/HTC/HTC%20EVO%20Shift%204G.jpg");
         productDao.save(product);
         assertEquals("test", productDao.getProduct(product.getId()).getCode());
-        assertThrows(NoSuchElementException.class, () ->{
-            productDao.getProduct(product.getId() + 1);
-        });
+        productDao.getProduct(product.getId() + 1);
     }
     @Test
     public void testFindProductsHasResults() {
@@ -47,14 +45,12 @@ public class ArrayListProductDaoTest
         productDao.save(product);
         assertEquals(product.getCode(), productDao.getProduct(product.getId()).getCode());
     }
-    @Test
+    @Test (expected = NoSuchElementException.class)
     public void testDeleteProduct(){
         Currency currency = Currency.getInstance("USD");
         Product product = new Product("test", "HTC EVO Shift 4G", new BigDecimal(320), currency, 3, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/HTC/HTC%20EVO%20Shift%204G.jpg");
         productDao.save(product);
         productDao.delete(product.getId());
-        assertThrows(NoSuchElementException.class, () ->{
-           productDao.getProduct(product.getId());
-        });
+        productDao.getProduct(product.getId());
     }
 }
