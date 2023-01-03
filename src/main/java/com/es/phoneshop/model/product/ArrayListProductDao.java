@@ -14,15 +14,16 @@ public class ArrayListProductDao implements ProductDao {
 
     public ArrayListProductDao() {
         products = new ArrayList<>();
+        maxProductId = 0;
         addProducts();
     }
 
     @Override
     public Product getProduct(Long id) throws NoSuchElementException {
-        synchronized (lock){
-            return products.stream().
-                    filter(product -> id.equals(product.getId())).
-                    findAny().orElseThrow(NoSuchElementException::new);
+        synchronized (lock) {
+            return products.stream()
+                    .filter(product -> id.equals(product.getId()))
+                    .findAny().orElseThrow(NoSuchElementException::new);
         }
     }
 
@@ -30,20 +31,19 @@ public class ArrayListProductDao implements ProductDao {
     public List<Product> findProducts() {
         synchronized (lock) {
             return products.stream().
-                    filter(product -> product.getPrice() != null).
-                    filter(product -> product.getStock() > 0).
-                    collect(Collectors.toList());
+                    filter(product -> product.getPrice() != null)
+                    .filter(product -> product.getStock() > 0)
+                    .collect(Collectors.toList());
         }
     }
 
     @Override
     public void save(Product product) {
         synchronized (lock) {
-            if(product.getId() != null){
+            if (product.getId() != null) {
                 delete(product.getId());
                 products.add(product);
-            }
-            else {
+            } else {
                 product.setId(maxProductId++);
                 products.add(product);
             }
@@ -52,7 +52,7 @@ public class ArrayListProductDao implements ProductDao {
 
     @Override
     public void delete(Long id) {
-        synchronized (lock){
+        synchronized (lock) {
             products.removeIf(product -> id != null && id.equals(product.getId()));
         }
     }

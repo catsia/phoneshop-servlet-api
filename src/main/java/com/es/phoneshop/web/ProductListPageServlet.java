@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class ProductListPageServlet extends HttpServlet {
     ProductDao productDao;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
