@@ -46,10 +46,7 @@ public class ArrayListProductDaoTest {
     @Test
     public void testFindProductsReturnsNotNullPrice() {
         List<Product> products = productDao.findProducts();
-        for (Product tempProduct : products) {
-            assertNotNull(tempProduct.getPrice());
-            assertTrue(tempProduct.getStock() > 0);
-        }
+        assertTrue(products.stream().allMatch(product -> product.getPrice() != null && product.getStock() > 0));
     }
 
     @Test
@@ -66,7 +63,7 @@ public class ArrayListProductDaoTest {
         assertEquals(product.getCode(), productDao.getProduct(product.getId()).getCode());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testSaveNullProduct() {
         productDao.save(null);
     }
@@ -80,12 +77,16 @@ public class ArrayListProductDaoTest {
 
     @Test
     public void testDeleteNonExistingProduct() {
+        List<Product> products = productDao.findProducts();
         productDao.delete(Long.MAX_VALUE);
         productDao.delete(Long.MIN_VALUE);
+        assertEquals(products, productDao.findProducts());
     }
 
     @Test
     public void testDeleteProductNullId() {
+        List<Product> products = productDao.findProducts();
         productDao.delete(null);
+        assertEquals(products, productDao.findProducts());
     }
 }
