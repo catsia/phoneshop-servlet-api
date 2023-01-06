@@ -28,12 +28,21 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public List<Product> findProducts(String query) {
+    public List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
         synchronized (lock) {
+            Comparator<Product> comparator = Comparator.comparing(product -> {
+                if (sortField == SortField.description){
+                    return (Comparable) product.getDescription();
+                } else {
+                    return (Comparable) product.getPrice();
+                }
+            });
+            if (sortOrder == SortOrder.desc) comparator = comparator.reversed();
             return products.stream()
                     .filter(product -> query == null || query.isEmpty() || product.getDescription().contains(query))
                     .filter(product -> product.getPrice() != null)
                     .filter(product -> product.getStock() > 0)
+                    .sorted(comparator)
                     .collect(Collectors.toList());
         }
     }
