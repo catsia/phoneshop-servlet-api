@@ -9,12 +9,13 @@ public class ArrayListProductDao implements ProductDao {
 
     private static ArrayListProductDao instance;
 
-    public static ArrayListProductDao getInstance(){
-        if (instance == null){
+    public static synchronized ArrayListProductDao getInstance() {
+        if (instance == null) {
             instance = new ArrayListProductDao();
         }
         return instance;
     }
+
     private List<Product> products;
 
     private long maxProductId;
@@ -42,25 +43,29 @@ public class ArrayListProductDao implements ProductDao {
             return products.stream()
                     .filter(product -> product.getPrice() != null)
                     .filter(product -> product.getStock() > 0)
-                    .filter(product -> splitQuery.contains("") || containsQuery(splitQuery, product))
-                    .sorted(generateComparator(sortField, sortOrder))
+                    .filter(product -> splitQuery.stream().anyMatch(product.getDescription()::contains))
+                    .sorted(sortField == null ? generateComparatorForQuery(splitQuery) : generateComparatorForFieldAndOrder(sortField, sortOrder))
                     .collect(Collectors.toList());
         }
     }
 
-    private boolean containsQuery(List<String> splitQuery, Product product){
-        return new HashSet<>(splitQuery(product.getDescription())).containsAll(splitQuery);
+    private Comparator<Product> generateComparatorForQuery(List<String> splitQuery) {
+        Comparator<Product> comparator = Comparator
+                .comparing(product -> splitQuery.size() - splitQuery.stream().filter(product.getDescription()::contains).count());
+        return comparator.thenComparing(product -> product.getDescription().length());
     }
 
-    private List<String> splitQuery(String query){
-        return Stream.of(query.split(" "))
-                .map (String::new)
-                .collect(Collectors.toList());
+    private List<String> splitQuery(String query) {
+        synchronized (lock) {
+            return Stream.of(query.split(" "))
+                    .map(String::new)
+                    .collect(Collectors.toList());
+        }
     }
 
-    private Comparator<Product> generateComparator(SortField sortField, SortOrder sortOrder){
+    private Comparator<Product> generateComparatorForFieldAndOrder(SortField sortField, SortOrder sortOrder) {
         Comparator<Product> comparator = Comparator.comparing(product -> {
-            if (sortField == SortField.description){
+            if (sortField == SortField.description) {
                 return (Comparable) product.getDescription();
             } else {
                 return (Comparable) product.getPrice();
