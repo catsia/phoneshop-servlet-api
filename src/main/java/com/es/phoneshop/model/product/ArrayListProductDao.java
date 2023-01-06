@@ -21,17 +21,16 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public Product getProduct(Long id) throws NoSuchElementException {
         synchronized (lock) {
-            return products.stream()
-                    .filter(product -> id.equals(product.getId()))
-                    .findAny().orElseThrow(NoSuchElementException::new);
+            return products.stream().filter(product -> id != null && id.equals(product.getId()))
+                    .findAny()
+                    .orElseThrow(NoSuchElementException::new);
         }
     }
 
     @Override
     public List<Product> findProducts() {
         synchronized (lock) {
-            return products.stream().
-                    filter(product -> product.getPrice() != null)
+            return products.stream().filter(product -> product.getPrice() != null)
                     .filter(product -> product.getStock() > 0)
                     .collect(Collectors.toList());
         }
@@ -40,6 +39,9 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public void save(Product product) {
         synchronized (lock) {
+            if (product == null) {
+                throw new IllegalArgumentException();
+            }
             if (product.getId() != null) {
                 delete(product.getId());
                 products.add(product);
@@ -75,4 +77,5 @@ public class ArrayListProductDao implements ProductDao {
             save(new Product("simsxg75", "Siemens SXG75", new BigDecimal(150), usd, 40, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Siemens/Siemens%20SXG75.jpg"));
         }
     }
+
 }
