@@ -8,7 +8,5 @@
   <h1>
     Unexpected error occurred
   </h1>
-  <footer>
-    <p>© 2023 Expert-Soft Lab</p>
-  </footer>
+  <tags:footer />
 </tags:master>

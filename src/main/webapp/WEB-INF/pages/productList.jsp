@@ -84,7 +84,5 @@
     [id*="see"]:target {display: block;}
   </style>
 
-  <footer>
-    <p>© 2023 Expert-Soft Lab</p>
-  </footer>
+   <tags:footer />
 </tags:master>

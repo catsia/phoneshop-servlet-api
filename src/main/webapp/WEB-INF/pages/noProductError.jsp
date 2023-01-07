@@ -6,9 +6,7 @@
 
 <tags:master pageTitle="Product not found">
   <h1>
-    Product not found
+    Product <c:out value = "${requestScope['javax.servlet.error.message']}"/> not found
   </h1>
-  <footer>
-    <p>© 2023 Expert-Soft Lab</p>
-  </footer>
+ <tags:footer/>
 </tags:master>

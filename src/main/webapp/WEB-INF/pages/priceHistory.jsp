@@ -14,7 +14,5 @@
                             </c:forEach>
                           </div>
                  </a>
-  <footer>
-    <p>© 2023 Expert-Soft Lab</p>
-  </footer>
+   <tags:footer />
 </tags:master>

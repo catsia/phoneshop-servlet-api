@@ -29,7 +29,10 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public Product getProduct(Long id) throws NoSuchElementException {
         synchronized (lock) {
-            return products.stream().filter(product -> id.equals(product.getId())).findAny().orElseThrow(NoSuchElementException::new);
+            return products.stream()
+                    .filter(product -> id.equals(product.getId()))
+                    .findAny()
+                    .orElseThrow(() -> new NoSuchElementException(String.valueOf(id)));
         }
     }
 
