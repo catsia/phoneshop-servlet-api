@@ -1,6 +1,5 @@
 package com.es.phoneshop.model.product;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,9 +29,7 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public Product getProduct(Long id) throws NoSuchElementException {
         synchronized (lock) {
-            return products.stream()
-                    .filter(product -> id.equals(product.getId()))
-                    .findAny().orElseThrow(NoSuchElementException::new);
+            return products.stream().filter(product -> id.equals(product.getId())).findAny().orElseThrow(NoSuchElementException::new);
         }
     }
 
@@ -40,26 +37,18 @@ public class ArrayListProductDao implements ProductDao {
     public List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
         synchronized (lock) {
             List<String> splitQuery = splitQuery(query);
-            return products.stream()
-                    .filter(product -> product.getPrice() != null)
-                    .filter(product -> product.getStock() > 0)
-                    .filter(product -> splitQuery.stream().anyMatch(product.getDescription()::contains))
-                    .sorted(sortField == null ? generateComparatorForQuery(splitQuery) : generateComparatorForFieldAndOrder(sortField, sortOrder))
-                    .collect(Collectors.toList());
+            return products.stream().filter(product -> product.getPrice() != null).filter(product -> product.getStock() > 0).filter(product -> splitQuery.stream().anyMatch(product.getDescription()::contains)).sorted(sortField == null ? generateComparatorForQuery(splitQuery) : generateComparatorForFieldAndOrder(sortField, sortOrder)).collect(Collectors.toList());
         }
     }
 
     private Comparator<Product> generateComparatorForQuery(List<String> splitQuery) {
-        Comparator<Product> comparator = Comparator
-                .comparing(product -> splitQuery.size() - splitQuery.stream().filter(product.getDescription()::contains).count());
+        Comparator<Product> comparator = Comparator.comparing(product -> splitQuery.size() - splitQuery.stream().filter(product.getDescription()::contains).count());
         return comparator.thenComparing(product -> product.getDescription().length());
     }
 
     private List<String> splitQuery(String query) {
         synchronized (lock) {
-            return Stream.of(query.split(" "))
-                    .map(String::new)
-                    .collect(Collectors.toList());
+            return Stream.of(query.split(" ")).map(String::new).collect(Collectors.toList());
         }
     }
 

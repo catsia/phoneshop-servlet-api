@@ -19,8 +19,8 @@ public class SampleDataServletContextListener implements ServletContextListener 
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        boolean insertSampleData = Boolean.valueOf(servletContextEvent.getServletContext().getInitParameter("insertSampleData"));
-        if (insertSampleData){
+        boolean insertSampleData = Boolean.parseBoolean(servletContextEvent.getServletContext().getInitParameter("insertSampleData"));
+        if (insertSampleData) {
             addProducts();
         }
     }
