@@ -30,7 +30,7 @@ public class ArrayListProductDao implements ProductDao {
     public Product getProduct(Long id) throws NoSuchElementException {
         synchronized (lock) {
             return products.stream()
-                    .filter(product -> id.equals(product.getId()))
+                    .filter(product -> id != null && id.equals(product.getId()))
                     .findAny()
                     .orElseThrow(() -> new NoSuchElementException(String.valueOf(id)));
         }
@@ -40,7 +40,11 @@ public class ArrayListProductDao implements ProductDao {
     public List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
         synchronized (lock) {
             List<String> splitQuery = splitQuery(query);
-            return products.stream().filter(product -> product.getPrice() != null).filter(product -> product.getStock() > 0).filter(product -> splitQuery.stream().anyMatch(product.getDescription()::contains)).sorted(sortField == null ? generateComparatorForQuery(splitQuery) : generateComparatorForFieldAndOrder(sortField, sortOrder)).collect(Collectors.toList());
+            return products.stream().filter(product -> product.getPrice() != null)
+                    .filter(product -> product.getStock() > 0)
+                    .filter(product -> splitQuery.stream().anyMatch(product.getDescription()::contains))
+                    .sorted(sortField == null ? generateComparatorForQuery(splitQuery) : generateComparatorForFieldAndOrder(sortField, sortOrder))
+                    .collect(Collectors.toList());
         }
     }
 
@@ -70,6 +74,9 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public void save(Product product) {
         synchronized (lock) {
+            if (product == null) {
+                throw new IllegalArgumentException();
+            }
             if (product.getId() != null) {
                 delete(product.getId());
                 products.add(product);
