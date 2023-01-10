@@ -19,13 +19,13 @@ public class Product {
     private int stock;
     private String imageUrl;
 
-    private Map<String, BigDecimal> priceHistory;
+    private Map<Date, BigDecimal> priceHistory;
 
-    public Map<String, BigDecimal> getPriceHistory() {
+    public Map<Date, BigDecimal> getPriceHistory() {
         return priceHistory;
     }
 
-    public void setPriceHistory(Map<String, BigDecimal> priceHistory) {
+    public void setPriceHistory(Map<Date, BigDecimal> priceHistory) {
         this.priceHistory = priceHistory;
     }
 
@@ -111,8 +111,9 @@ public class Product {
     }
 
     private void putPriceHistory(BigDecimal price){
-        DateFormat Date = DateFormat.getDateInstance();
+        DateFormat dateFormat = DateFormat.getDateInstance();
         Calendar cals = Calendar.getInstance();
-        priceHistory.put(Date.format(cals.getTime()), price);
+        Date date = cals.getTime();
+        priceHistory.put(date, price);
     }
 }

@@ -39,23 +39,32 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
         synchronized (lock) {
+            query.replaceAll("\\s+", " ").toLowerCase();
             List<String> splitQuery = splitQuery(query);
             return products.stream().filter(product -> product.getPrice() != null)
                     .filter(product -> product.getStock() > 0)
-                    .filter(product -> splitQuery.stream().anyMatch(product.getDescription()::contains))
+                    .filter(product -> splitQuery.stream().anyMatch(product.getDescription().toLowerCase()::contains))
                     .sorted(sortField == null ? generateComparatorForQuery(splitQuery) : generateComparatorForFieldAndOrder(sortField, sortOrder))
                     .collect(Collectors.toList());
         }
     }
 
     private Comparator<Product> generateComparatorForQuery(List<String> splitQuery) {
-        Comparator<Product> comparator = Comparator.comparing(product -> splitQuery.size() - splitQuery.stream().filter(product.getDescription()::contains).count());
+        Comparator<Product> comparator = Comparator
+                .comparing(product -> splitQuery.size() - splitQuery.stream()
+                        .filter(product.getDescription()::contains)
+                        .count());
         return comparator.thenComparing(product -> product.getDescription().length());
     }
 
     private List<String> splitQuery(String query) {
         synchronized (lock) {
-            return Stream.of(query.split(" ")).map(String::new).collect(Collectors.toList());
+            if (query == null) {
+                return new ArrayList<>();
+            }
+            return Stream.of(query.split(" "))
+                    .map(String::new)
+                    .collect(Collectors.toList());
         }
     }
 
@@ -67,7 +76,9 @@ public class ArrayListProductDao implements ProductDao {
                 return (Comparable) product.getPrice();
             }
         });
-        if (sortOrder == SortOrder.desc) comparator = comparator.reversed();
+        if (sortOrder == SortOrder.desc) {
+            comparator = comparator.reversed();
+        }
         return comparator;
     }
 

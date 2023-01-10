@@ -53,7 +53,7 @@
                                 <h2>Price history</h2>
                                 <p>${product.description}</p>
                                 <c:forEach var="price" items="${product.priceHistory}">
-                                   C ${price.key} цена <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+                                   From <fmt:formatDate value="${price.key}" pattern="yyyy-MM-dd" /> price <fmt:formatNumber value="${price.value}" type="currency" currencySymbol="${product.currency.symbol}"/>
                                 </c:forEach>
                               </div>
                      </a>

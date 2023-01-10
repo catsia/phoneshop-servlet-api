@@ -4,7 +4,7 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ page isErrorPage="true" %>
 
-<tags:master pageTitle="Product not found">
+<tags:master pageTitle="Unexpected error">
   <h1>
     Unexpected error occurred
   </h1>

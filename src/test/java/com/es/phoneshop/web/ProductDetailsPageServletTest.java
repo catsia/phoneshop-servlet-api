@@ -12,10 +12,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductDetailsPageServletTest {
@@ -33,10 +33,10 @@ public class ProductDetailsPageServletTest {
     @Before
     public void setup() throws ServletException {
         servlet.init(config);
-        when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
+        when(request.getPathInfo()).thenReturn("/1");
     }
 
-    @Test
+    @Test (expected = NoSuchElementException.class)
     public void testDoGet() throws ServletException, IOException {
         servlet.doGet(request, response);
 

@@ -27,7 +27,6 @@ public class ArrayListProductDaoTest {
         productDao.save(new Product("sgs3", "C", new BigDecimal(300), usd, 5, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S%20III.jpg"));
         productDao.save(new Product("sgs4", "B", new BigDecimal(400), usd, 78, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S%20III.jpg"));
         List<Product> products = productDao.findProducts("", SortField.price, SortOrder.asc);
-        products.stream().forEach(product1 -> System.out.println(product1.getPrice()));
         assertTrue(products.get(0).getPrice().compareTo(products.get(1).getPrice()) < 0 || Objects.equals(products.get(0).getPrice(), products.get(1).getPrice()));
     }
 
