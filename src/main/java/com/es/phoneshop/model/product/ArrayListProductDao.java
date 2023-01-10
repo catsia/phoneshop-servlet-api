@@ -39,11 +39,10 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
         synchronized (lock) {
-            query.replaceAll("\\s+", " ").toLowerCase();
             List<String> splitQuery = splitQuery(query);
             return products.stream().filter(product -> product.getPrice() != null)
                     .filter(product -> product.getStock() > 0)
-                    .filter(product -> splitQuery.stream().anyMatch(product.getDescription().toLowerCase()::contains))
+                    .filter(product ->  splitQuery.isEmpty() || splitQuery.stream().anyMatch(product.getDescription().toLowerCase()::contains))
                     .sorted(sortField == null ? generateComparatorForQuery(splitQuery) : generateComparatorForFieldAndOrder(sortField, sortOrder))
                     .collect(Collectors.toList());
         }
@@ -62,6 +61,7 @@ public class ArrayListProductDao implements ProductDao {
             if (query == null) {
                 return new ArrayList<>();
             }
+            query.replaceAll("\\s+", " ").toLowerCase();
             return Stream.of(query.split(" "))
                     .map(String::new)
                     .collect(Collectors.toList());
