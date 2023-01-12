@@ -33,6 +33,7 @@ public class ArrayListProductDao implements ProductDao {
                     .filter(product -> id != null && id.equals(product.getId()))
                     .findAny()
                     .orElseThrow(() -> new NoSuchElementException(String.valueOf(id)));
+
         }
     }
 
@@ -104,4 +105,5 @@ public class ArrayListProductDao implements ProductDao {
             products.removeIf(product -> id != null && id.equals(product.getId()));
         }
     }
+
 }

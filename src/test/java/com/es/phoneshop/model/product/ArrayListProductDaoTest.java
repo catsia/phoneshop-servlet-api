@@ -4,12 +4,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+
 import java.util.*;
+
 
 import static org.junit.Assert.*;
 
 public class ArrayListProductDaoTest {
     private ProductDao productDao;
+    Product product;
 
     Product product;
 
@@ -21,6 +24,7 @@ public class ArrayListProductDaoTest {
     }
 
     @Test
+
     public void testFindProductsWithSortFieldAndSortOrder() {
         Currency usd = Currency.getInstance("USD");
         productDao.save(new Product("sgs", "A", new BigDecimal(100), usd, 130, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg"));
@@ -63,6 +67,7 @@ public class ArrayListProductDaoTest {
     }
 
     @Test
+
     public void testGetExistingProducts() {
         productDao.save(product);
         assertEquals("test", productDao.getProduct(product.getId()).getCode());
@@ -79,8 +84,8 @@ public class ArrayListProductDaoTest {
         productDao.getProduct(null);
     }
 
-
     @Test
+
     public void testSaveExistingProduct() {
         productDao.save(product);
         product.setCode("test-product");
@@ -111,7 +116,7 @@ public class ArrayListProductDaoTest {
         List<Product> products = productDao.findProducts("", null, null);
         productDao.delete(Long.MAX_VALUE);
         productDao.delete(Long.MIN_VALUE);
-        assertEquals(products, productDao.findProducts("", null, null));
+        assertEquals(products, productDao.findProducts("", null, null));        
     }
 
     @Test
