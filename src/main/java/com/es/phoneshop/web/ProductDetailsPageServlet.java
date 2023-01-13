@@ -65,12 +65,10 @@ public class ProductDetailsPageServlet extends HttpServlet {
             request.setAttribute("error", "Out of stock, only " + e.getStock() + " left");
             doGet(request, response);
             return;
-        }
-        catch (NoSuchElementException exception) {
+        } catch (NoSuchElementException exception) {
             response.setStatus(404);
         }
 
         response.sendRedirect(request.getContextPath() + "/products/" + request.getPathInfo().substring(1) + "?message=" + message);
-
     }
 }

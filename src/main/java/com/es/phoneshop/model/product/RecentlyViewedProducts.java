@@ -1,7 +1,5 @@
 package com.es.phoneshop.model.product;
 
-import org.jetbrains.annotations.NotNull;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +18,7 @@ public class RecentlyViewedProducts {
         return instance;
     }
 
-    public List<Product> getRecentlyViewedProducts(@NotNull HttpServletRequest request) {
+    public List<Product> getRecentlyViewedProducts(HttpServletRequest request) {
         synchronized (request.getSession()) {
             List<Product> recentlyViewed = (List<Product>) request.getSession().getAttribute(RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE);
             if (recentlyViewed == null) {
@@ -32,7 +30,7 @@ public class RecentlyViewedProducts {
     }
 
 
-    public void addViewedProduct(@NotNull List<Product> recentlyViewedProducts, Long productId) {
+    public void addViewedProduct(List<Product> recentlyViewedProducts, Long productId) {
         ProductDao productDao = ArrayListProductDao.getInstance();
         Optional<Product> product = recentlyViewedProducts.stream().filter(products -> products.getId().equals(productId)).findAny();
         if (product.isPresent()) {
