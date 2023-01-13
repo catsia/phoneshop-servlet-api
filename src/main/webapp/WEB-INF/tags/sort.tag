@@ -3,5 +3,10 @@
 <%@ attribute name="order" required="true" %>
 
 <a href = "?sort=${sort}&order=${order}&query=${param.query} ">
- <img src="${sort eq param.sort and order eq param.order ? "images/asc-true.png" : "images/asc-false.png"}" width="15" height="15" >
+<c:if test="${sort eq param.sort and order eq param.order}">
+    <img src="${ order eq 'asc' ? "images/asc-true.png" : "images/desc-true.png"}" width="15" height="15" >
+</c:if>
+<c:if test="${sort ne param.sort and order ne param.order}">
+    <img src="${ order eq 'asc' ? "images/asc-false.png" : "images/desc-false.png"}" width="15" height="15" >
+</c:if>
 </a>

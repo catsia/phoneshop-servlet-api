@@ -6,7 +6,6 @@ import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CartServiceImp implements CartService {
@@ -36,7 +35,9 @@ public class CartServiceImp implements CartService {
 
     @Override
     public void add(Cart cart, Long productId, int quantity) throws OutOfStockException {
-        List<CartItem> cartItems = cart.getCartItems().stream().filter(cartItem -> cartItem.getProduct() != null && cartItem.getProduct().getId().equals(productId)).collect(Collectors.toList());
+        List<CartItem> cartItems = cart.getCartItems().stream()
+                .filter(cartItem -> cartItem.getProduct() != null && cartItem.getProduct().getId().equals(productId))
+                .collect(Collectors.toList());
         if (cartItems.size() == 1) {
             if (cartItems.get(0).getQuantity() + quantity > productDao.getProduct(productId).getStock()) {
                 throw new OutOfStockException(productDao.getProduct(productId).getStock());
