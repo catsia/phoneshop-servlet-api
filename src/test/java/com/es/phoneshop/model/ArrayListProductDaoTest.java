@@ -1,5 +1,6 @@
-package com.es.phoneshop.model.product;
+package com.es.phoneshop.model;
 
+import com.es.phoneshop.model.product.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,8 +13,6 @@ import static org.junit.Assert.*;
 
 public class ArrayListProductDaoTest {
     private ProductDao productDao;
-    Product product;
-
     Product product;
 
     @Before
