@@ -43,7 +43,7 @@ public class ArrayListProductDao implements ProductDao {
             List<String> splitQuery = splitQuery(query);
             return products.stream().filter(product -> product.getPrice() != null)
                     .filter(product -> product.getStock() > 0)
-                    .filter(product ->  splitQuery.isEmpty() || splitQuery.stream().anyMatch(product.getDescription().toLowerCase()::contains))
+                    .filter(product -> splitQuery.isEmpty() || splitQuery.stream().anyMatch(product.getDescription().toLowerCase()::contains))
                     .sorted(sortField == null ? generateComparatorForQuery(splitQuery) : generateComparatorForFieldAndOrder(sortField, sortOrder))
                     .collect(Collectors.toList());
         }
@@ -52,8 +52,11 @@ public class ArrayListProductDao implements ProductDao {
     private Comparator<Product> generateComparatorForQuery(List<String> splitQuery) {
         Comparator<Product> comparator = Comparator
                 .comparing(product -> splitQuery.size() - splitQuery.stream()
-                        .filter(product.getDescription()::contains)
+                        .filter(product.getDescription().toLowerCase()::contains)
                         .count());
+        for (String query : splitQuery) {
+            comparator = comparator.thenComparing(product -> !product.getDescription().toLowerCase().contains(query));
+        }
         return comparator.thenComparing(product -> product.getDescription().length());
     }
 

@@ -81,8 +81,39 @@
       left: 0;
       margin: auto;
     }
+    #viewedProducts{
+    container-type: inline-size;
+        display: block;
+        width: 150px;
+      height: 100px;
+      text-align: center;
+      border: 1px solid gray;
+      float: left;
+      position: relative;
+    }
     [id*="see"]:target {display: block;}
   </style>
+<p>
+        Recently viewed products
+    </p>
+    <div >
+        <c:forEach var="viewedProducts" items="${viewedProducts}">
+            <div id = "viewedProducts">
+                <div>
+                <img class="product-tile" src="${viewedProducts.imageUrl}">
+                </div>
+                <a href="${pageContext.servletContext.contextPath}/products/${viewedProducts.id}">
+                              ${viewedProducts.description}
+                </a>
+                <a href="#see/${viewedProducts.id}">
+
+                    <fmt:formatNumber value="${viewedProducts.price}" type="currency" currencySymbol="${viewedProducts.currency.symbol}"/>
+                </a>
+            </div>
+        </c:forEach>
+    </div>
+
 
    <tags:footer />
+
 </tags:master>

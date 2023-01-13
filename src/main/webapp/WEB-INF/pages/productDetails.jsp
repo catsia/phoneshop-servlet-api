@@ -8,32 +8,63 @@
   <p>
     Product ${product.description}
   </p>
-  <table>
-    <tr>
-      <td>Image</td>
-      <td>
-       <img src="${product.imageUrl}">
-      </td>
-    </tr>
-    <tr>
-      <td class="price">Price</td>
-      <td class="price">
-         <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
-       </td>
-    </tr>
+  <p>
+    Cart: ${cart}
+  </p>
+   <c:if test = "${not empty param.message}">
+      <div class = "success">
+          ${param.message}
+      </div>
+    </c:if>
 
-    <tr>
-    <td class="code">Code</td>
-    <td class="code">
-       ${product.code}
-    </td>
-    </tr>
-    <tr>
-      <td class="stock">Stock</td>
-      <td class="stock" valign="top">
-         ${product.stock}
-      </td>
-    </tr>
-   </table>
+  <c:if test = "${not empty error}">
+    <div class = "error">
+        Error while adding to cart
+    </div>
+  </c:if>
+
+  <form method = "post">
+      <table>
+        <tr>
+          <td>Image</td>
+          <td>
+           <img src="${product.imageUrl}">
+          </td>
+        </tr>
+        <tr>
+          <td class="price">Price</td>
+          <td class="price">
+             <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+           </td>
+        </tr>
+
+        <tr>
+        <td class="code">Code</td>
+        <td class="code">
+           ${product.code}
+        </td>
+        </tr>
+        <tr>
+          <td class="stock">Stock</td>
+          <td class="stock" valign="top">
+             ${product.stock}
+          </td>
+        </tr>
+        <tr>
+          <td class="quantity">Quantity</td>
+          <td class="quantity">
+             <input name = "quantity" value = "${not empty error ? param.quantity : 1}">
+             <c:if test = "${not empty error}">
+                         <div class = "error">
+                             ${error}
+                         </div>
+              </c:if>
+          </td>
+
+        </tr>
+       </table>
+         <Button>Add to cart</Button>
+   </form>
+
   <tags:footer />
 </tags:master>
