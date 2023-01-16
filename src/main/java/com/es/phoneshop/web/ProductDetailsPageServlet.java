@@ -1,12 +1,11 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.cart.CartService;
 import com.es.phoneshop.model.cart.CartServiceImp;
 import com.es.phoneshop.model.cart.OutOfStockException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.ProductDao;
-import com.es.phoneshop.model.product.RecentlyViewedProducts;
+import com.es.phoneshop.model.product.RecentlyViewedProductsService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -16,21 +15,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.NoSuchElementException;
 
 public class ProductDetailsPageServlet extends HttpServlet {
     private ProductDao productDao;
 
     private CartService cartService;
 
-    private RecentlyViewedProducts recentlyViewedProducts;
+    private RecentlyViewedProductsService recentlyViewedProductsService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         productDao = ArrayListProductDao.getInstance();
         cartService = CartServiceImp.getInstance();
-        recentlyViewedProducts = RecentlyViewedProducts.getInstance();
+        recentlyViewedProductsService = RecentlyViewedProductsService.getInstance();
     }
 
     @Override
@@ -38,7 +36,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
         Long productId = Long.valueOf(request.getPathInfo().substring(1));
         request.setAttribute("product", productDao.getProduct(productId));
         request.setAttribute("cart", cartService.getCart(request).toString());
-        recentlyViewedProducts.addViewedProduct(recentlyViewedProducts.getRecentlyViewedProducts(request), productId);
+        recentlyViewedProductsService.addViewedProduct(recentlyViewedProductsService.getRecentlyViewedProducts(request), productId);
         request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);
     }
 
@@ -46,7 +44,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int quantity;
         String message = "";
-
+        String productId = request.getPathInfo().substring(1);
         try {
             quantity = NumberFormat
                     .getInstance(request.getLocale())
@@ -58,17 +56,14 @@ public class ProductDetailsPageServlet extends HttpServlet {
             return;
         }
         try {
-            Cart cart = cartService.getCart(request);
-            cartService.add(cart, Long.valueOf(request.getPathInfo().substring(1)), quantity);
+            cartService.add(request, Long.valueOf(productId), quantity);
             message = "Product added to the cart";
         } catch (OutOfStockException e) {
             request.setAttribute("error", "Out of stock, only " + e.getStock() + " left");
             doGet(request, response);
             return;
-        } catch (NoSuchElementException exception) {
-            response.setStatus(404);
         }
 
-        response.sendRedirect(request.getContextPath() + "/products/" + request.getPathInfo().substring(1) + "?message=" + message);
+        response.sendRedirect(request.getContextPath() + "/products/" + productId + "?message=" + message);
     }
 }

@@ -34,21 +34,24 @@ public class CartServiceImp implements CartService {
     }
 
     @Override
-    public void add(Cart cart, Long productId, int quantity) throws OutOfStockException {
-        List<CartItem> cartItems = cart.getCartItems().stream()
-                .filter(cartItem -> cartItem.getProduct() != null && cartItem.getProduct().getId().equals(productId))
-                .collect(Collectors.toList());
-        if (cartItems.size() == 1) {
-            if (cartItems.get(0).getQuantity() + quantity > productDao.getProduct(productId).getStock()) {
-                throw new OutOfStockException(productDao.getProduct(productId).getStock());
-            }
-            cartItems.get(0).setQuantity(quantity);
-        } else {
-            if (quantity > productDao.getProduct(productId).getStock()) {
-                throw new OutOfStockException(productDao.getProduct(productId).getStock());
-            }
+    public void add(HttpServletRequest request, Long productId, int quantity) throws OutOfStockException {
+        synchronized (request.getSession()) {
+            Cart cart = getCart(request);
             Product product = productDao.getProduct(productId);
-            cart.getCartItems().add(new CartItem(product, quantity));
+            List<CartItem> cartItems = cart.getCartItems().stream()
+                    .filter(cartItem -> cartItem.getProduct() != null && cartItem.getProduct().getId().equals(productId))
+                    .collect(Collectors.toList());
+            if (cartItems.size() == 1) {
+                if (cartItems.get(0).getQuantity() + quantity > product.getStock()) {
+                    throw new OutOfStockException(product.getStock());
+                }
+                cartItems.get(0).setQuantity(quantity);
+            } else {
+                if (quantity > productDao.getProduct(productId).getStock()) {
+                    throw new OutOfStockException(product.getStock());
+                }
+                cart.getCartItems().add(new CartItem(product, quantity));
+            }
         }
     }
 }

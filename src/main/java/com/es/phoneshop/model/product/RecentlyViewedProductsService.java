@@ -1,21 +1,25 @@
 package com.es.phoneshop.model.product;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-public class RecentlyViewedProducts {
+public class RecentlyViewedProductsService {
 
-    private static RecentlyViewedProducts instance;
+    private static RecentlyViewedProductsService instance;
 
-    private static final String RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE = RecentlyViewedProducts.class.getName();
+    private static final String RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE = RecentlyViewedProductsService.class.getName();
 
-    public static RecentlyViewedProducts getInstance() {
+    private ProductDao productDao;
+
+    public static RecentlyViewedProductsService getInstance() {
         if (instance == null) {
-            instance = new RecentlyViewedProducts();
+            instance = new RecentlyViewedProductsService();
         }
         return instance;
+    }
+
+    private RecentlyViewedProductsService() {
+        productDao = ArrayListProductDao.getInstance();
     }
 
     public List<Product> getRecentlyViewedProducts(HttpServletRequest request) {
@@ -31,9 +35,9 @@ public class RecentlyViewedProducts {
 
 
     public void addViewedProduct(List<Product> recentlyViewedProducts, Long productId) {
-        ProductDao productDao = ArrayListProductDao.getInstance();
         Optional<Product> product = recentlyViewedProducts.stream().filter(products -> products.getId().equals(productId)).findAny();
         if (product.isPresent()) {
+            Collections.swap(recentlyViewedProducts, recentlyViewedProducts.size() - 1, recentlyViewedProducts.indexOf(product.get()));
             return;
         }
         if (recentlyViewedProducts.size() == 3) {
