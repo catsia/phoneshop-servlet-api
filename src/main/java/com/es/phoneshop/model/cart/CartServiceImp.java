@@ -47,7 +47,7 @@ public class CartServiceImp implements CartService {
                 }
                 cartItems.get(0).setQuantity(quantity);
             } else {
-                if (quantity > productDao.getProduct(productId).getStock()) {
+                if (quantity > product.getStock()) {
                     throw new OutOfStockException(product.getStock());
                 }
                 cart.getCartItems().add(new CartItem(product, quantity));

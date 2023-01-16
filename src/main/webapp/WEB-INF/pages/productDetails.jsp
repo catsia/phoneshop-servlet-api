@@ -68,10 +68,9 @@
  <p>
         Recently viewed products
     </p>
-    <c:forEach var="viewedProduct" items="${viewedProducts}">
 
-        <tags:recentlyViewedProducts viewedProducts = "${viewedProduct}"/>
-    </c:forEach>
+
+        <tags:recentlyViewedProducts />
 
 </tags:master>
 <div style="clear: both"></div>

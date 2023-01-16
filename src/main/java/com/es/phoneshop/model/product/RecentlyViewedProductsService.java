@@ -3,7 +3,7 @@ package com.es.phoneshop.model.product;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-public class RecentlyViewedProductsService {
+public class RecentlyViewedProductsService implements RecentlyViewedProduct {
 
     private static RecentlyViewedProductsService instance;
 
@@ -22,6 +22,7 @@ public class RecentlyViewedProductsService {
         productDao = ArrayListProductDao.getInstance();
     }
 
+    @Override
     public List<Product> getRecentlyViewedProducts(HttpServletRequest request) {
         synchronized (request.getSession()) {
             List<Product> recentlyViewed = (List<Product>) request.getSession().getAttribute(RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE);
@@ -33,7 +34,7 @@ public class RecentlyViewedProductsService {
         }
     }
 
-
+    @Override
     public void addViewedProduct(List<Product> recentlyViewedProducts, Long productId) {
         Optional<Product> product = recentlyViewedProducts.stream().filter(products -> products.getId().equals(productId)).findAny();
         if (product.isPresent()) {
