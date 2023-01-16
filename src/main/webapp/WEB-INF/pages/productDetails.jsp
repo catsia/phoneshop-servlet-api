@@ -11,7 +11,7 @@
   <p>
     Cart: ${cart}
   </p>
-   <c:if test = "${not empty param.message}">
+   <c:if test = "${not empty param.message and empty error}">
       <div class = "success">
           ${param.message}
       </div>
@@ -65,6 +65,14 @@
        </table>
          <Button>Add to cart</Button>
    </form>
+ <p>
+        Recently viewed products
+    </p>
+    <c:forEach var="viewedProduct" items="${viewedProducts}">
 
-  <tags:footer />
+        <tags:recentlyViewedProducts viewedProducts = "${viewedProduct}"/>
+    </c:forEach>
+
 </tags:master>
+<div style="clear: both"></div>
+  <tags:footer />

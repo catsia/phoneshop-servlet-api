@@ -60,59 +60,6 @@
     </c:forEach>
   </table>
 
-  <style>
-      [id*="see"] {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-    #popup {
-      width: 250px;
-      height: 300px;
-      text-align: center;
-      border: 1px solid gray;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      margin: auto;
-    }
-    #viewedProducts{
-    container-type: inline-size;
-        display: block;
-        width: 150px;
-      height: 100px;
-      text-align: center;
-      border: 1px solid gray;
-      float: left;
-      position: relative;
-    }
-    [id*="see"]:target {display: block;}
-  </style>
-<p>
-        Recently viewed products
-    </p>
-    <div >
-        <c:forEach var="viewedProducts" items="${viewedProducts}">
-            <div id = "viewedProducts">
-                <div>
-                <img class="product-tile" src="${viewedProducts.imageUrl}">
-                </div>
-                <a href="${pageContext.servletContext.contextPath}/products/${viewedProducts.id}">
-                              ${viewedProducts.description}
-                </a>
-                <a href="#see/${viewedProducts.id}">
-
-                    <fmt:formatNumber value="${viewedProducts.price}" type="currency" currencySymbol="${viewedProducts.currency.symbol}"/>
-                </a>
-            </div>
-        </c:forEach>
-    </div>
-
 
    <tags:footer />
 

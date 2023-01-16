@@ -1,5 +1,6 @@
 package com.es.phoneshop.web;
 
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +12,9 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -28,20 +31,33 @@ public class ProductDetailsPageServletTest {
     @Mock
     private ServletConfig config;
 
+    @Mock
+    private HttpSession session;
+
     private ProductDetailsPageServlet servlet = new ProductDetailsPageServlet();
 
     @Before
     public void setup() throws ServletException {
         servlet.init(config);
         when(request.getPathInfo()).thenReturn("/1");
+        when(request.getParameter("quantity")).thenReturn("1");
+        when(request.getLocale()).thenReturn(Locale.getDefault());
+        when(request.getSession()).thenReturn(session);
     }
 
-    @Test (expected = NoSuchElementException.class)
+    @Test(expected = NoSuchElementException.class)
     public void testDoGet() throws ServletException, IOException {
         servlet.doGet(request, response);
 
         verify(request).getRequestDispatcher(eq("/WEB-INF/pages/productDetails.jsp"));
         verify(requestDispatcher).forward(request, response);
         verify(request).setAttribute(eq("product"), any());
+    }
+
+    @Test
+    public void testDoPost() throws ServletException, IOException {
+        servlet.doPost(request, response);
+
+        verify(response).sendRedirect(anyString());
     }
 }

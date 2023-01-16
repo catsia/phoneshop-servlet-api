@@ -2,7 +2,7 @@ package com.es.phoneshop.model;
 
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
-import com.es.phoneshop.model.product.RecentlyViewedProducts;
+import com.es.phoneshop.model.product.RecentlyViewedProductsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecentlyViewedProductsTest {
-    private RecentlyViewedProducts recentlyViewedProducts;
+    private RecentlyViewedProductsService recentlyViewedProductsService;
 
     private ProductDao productDao;
 
@@ -27,7 +27,7 @@ public class RecentlyViewedProductsTest {
 
     @Before
     public void setup() {
-        recentlyViewedProducts = RecentlyViewedProducts.getInstance();
+        recentlyViewedProductsService = RecentlyViewedProductsService.getInstance();
         products = new ArrayList<>(3);
         Currency currency = Currency.getInstance("USD");
         product = new Product(4L, "test", "HTC EVO Shift 4G", new BigDecimal(320), currency, 3, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/HTC/HTC%20EVO%20Shift%204G.jpg");
@@ -37,7 +37,7 @@ public class RecentlyViewedProductsTest {
 
     @Test
     public void testAddViewedProduct() {
-        recentlyViewedProducts.addViewedProduct(products, 4L);
+        recentlyViewedProductsService.addViewedProduct(products, 4L);
         assertEquals(1, products.size());
     }
 
@@ -47,7 +47,7 @@ public class RecentlyViewedProductsTest {
         products.add(new Product(2L, "test", "HTC EVO Shift 4G", new BigDecimal(320), currency, 3, "https://raw.g"));
         products.add(new Product(3L, "test", "HTC EVO Shift 4G", new BigDecimal(320), currency, 3, "https://raw.g"));
 
-        recentlyViewedProducts.addViewedProduct(products, 4L);
+        recentlyViewedProductsService.addViewedProduct(products, 4L);
 
         assertEquals(3, products.size());
     }
