@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CartServiceImp implements CartService {
-    private static CartServiceImp instance;
+public class HttpSessionCartService implements CartService {
+    private static HttpSessionCartService instance;
 
-    private static final String CART_SESSION_ATTRIBUTE = CartServiceImp.class.getName() + ".cart";
+    private static final String CART_SESSION_ATTRIBUTE = HttpSessionCartService.class.getName() + ".cart";
 
     private ProductDao productDao = ArrayListProductDao.getInstance();
 
-    public static CartServiceImp getInstance() {
+    public static HttpSessionCartService getInstance() {
         if (instance == null) {
-            instance = new CartServiceImp();
+            instance = new HttpSessionCartService();
         }
         return instance;
     }

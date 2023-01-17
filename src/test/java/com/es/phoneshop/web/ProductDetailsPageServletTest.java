@@ -1,6 +1,5 @@
 package com.es.phoneshop.web;
 
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,10 +53,28 @@ public class ProductDetailsPageServletTest {
         verify(request).setAttribute(eq("product"), any());
     }
 
-    @Test
+    @Test(expected = NoSuchElementException.class)
     public void testDoPost() throws ServletException, IOException {
         servlet.doPost(request, response);
 
         verify(response).sendRedirect(anyString());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testDoPostQuantityNotANumber() throws ServletException, IOException {
+        when(request.getParameter("quantity")).thenReturn("number");
+        servlet.doPost(request, response);
+
+        verify(request).setAttribute("error", "Not a number");
+        verify(response, never()).sendRedirect(anyString());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testDoPostQuantityNegativeANumber() throws ServletException, IOException {
+        when(request.getParameter("quantity")).thenReturn("-1");
+        servlet.doPost(request, response);
+
+        verify(request).setAttribute("error", "Negative number or zero");
+        verify(response, never()).sendRedirect(anyString());
     }
 }

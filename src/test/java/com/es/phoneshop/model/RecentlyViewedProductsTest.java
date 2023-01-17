@@ -3,7 +3,7 @@ package com.es.phoneshop.model;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
-import com.es.phoneshop.model.product.RecentlyViewedProductsService;
+import com.es.phoneshop.model.product.HttpSessionRecentlyViewedProduct;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecentlyViewedProductsTest {
-    private RecentlyViewedProductsService recentlyViewedProductsService;
+    private HttpSessionRecentlyViewedProduct httpSessionRecentlyViewedProduct;
 
     private ProductDao productDao;
 
@@ -39,7 +39,7 @@ public class RecentlyViewedProductsTest {
 
     @Before
     public void setup() {
-        recentlyViewedProductsService = RecentlyViewedProductsService.getInstance();
+        httpSessionRecentlyViewedProduct = HttpSessionRecentlyViewedProduct.getInstance();
         productDao = ArrayListProductDao.getInstance();
         products = new ArrayList<>(3);
         Currency currency = Currency.getInstance("USD");
@@ -52,7 +52,7 @@ public class RecentlyViewedProductsTest {
 
     @Test
     public void testAddViewedProduct() {
-        recentlyViewedProductsService.addViewedProduct(request, 4L);
+        httpSessionRecentlyViewedProduct.addViewedProduct(request, 4L);
         assertEquals(1, products.size());
     }
 
@@ -62,7 +62,7 @@ public class RecentlyViewedProductsTest {
         products.add(new Product(2L, "test", "HTC EVO Shift 4G", new BigDecimal(320), currency, 3, "https://raw.g"));
         products.add(new Product(3L, "test", "HTC EVO Shift 4G", new BigDecimal(320), currency, 3, "https://raw.g"));
 
-        recentlyViewedProductsService.addViewedProduct(request, 4L);
+        httpSessionRecentlyViewedProduct.addViewedProduct(request, 4L);
 
         assertEquals(3, products.size());
     }

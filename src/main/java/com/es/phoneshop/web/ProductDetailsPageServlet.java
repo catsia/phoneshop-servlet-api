@@ -1,11 +1,11 @@
 package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.cart.CartService;
-import com.es.phoneshop.model.cart.CartServiceImp;
+import com.es.phoneshop.model.cart.HttpSessionCartService;
 import com.es.phoneshop.model.cart.OutOfStockException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.ProductDao;
-import com.es.phoneshop.model.product.RecentlyViewedProductsService;
+import com.es.phoneshop.model.product.HttpSessionRecentlyViewedProduct;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -21,14 +21,14 @@ public class ProductDetailsPageServlet extends HttpServlet {
 
     private CartService cartService;
 
-    private RecentlyViewedProductsService recentlyViewedProductsService;
+    private HttpSessionRecentlyViewedProduct httpSessionRecentlyViewedProduct;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         productDao = ArrayListProductDao.getInstance();
-        cartService = CartServiceImp.getInstance();
-        recentlyViewedProductsService = RecentlyViewedProductsService.getInstance();
+        cartService = HttpSessionCartService.getInstance();
+        httpSessionRecentlyViewedProduct = HttpSessionRecentlyViewedProduct.getInstance();
     }
 
     @Override
@@ -36,8 +36,8 @@ public class ProductDetailsPageServlet extends HttpServlet {
         Long productId = Long.valueOf(request.getPathInfo().substring(1));
         request.setAttribute("product", productDao.getProduct(productId));
         request.setAttribute("cart", cartService.getCart(request).toString());
-        request.setAttribute("viewedProducts", recentlyViewedProductsService.getRecentlyViewedProducts(request));
-        recentlyViewedProductsService.addViewedProduct(request, productId);
+        request.setAttribute("viewedProducts", httpSessionRecentlyViewedProduct.getRecentlyViewedProducts(request));
+        httpSessionRecentlyViewedProduct.addViewedProduct(request, productId);
         request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);
     }
 
@@ -51,8 +51,13 @@ public class ProductDetailsPageServlet extends HttpServlet {
                     .getInstance(request.getLocale())
                     .parse(request.getParameter("quantity"))
                     .intValue();
+            verifyQuantity(quantity);
         } catch (ParseException e) {
             request.setAttribute("error", "Not a number");
+            doGet(request, response);
+            return;
+        } catch (IllegalArgumentException e) {
+            request.setAttribute("error", "Negative number or zero");
             doGet(request, response);
             return;
         }
@@ -66,5 +71,11 @@ public class ProductDetailsPageServlet extends HttpServlet {
         }
 
         response.sendRedirect(request.getContextPath() + "/products/" + productId + "?message=" + message);
+    }
+
+    private void verifyQuantity(int quantity) throws IllegalArgumentException {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException();
+        }
     }
 }

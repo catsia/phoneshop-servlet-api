@@ -3,22 +3,22 @@ package com.es.phoneshop.model.product;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-public class RecentlyViewedProductsService implements RecentlyViewedProduct {
+public class HttpSessionRecentlyViewedProduct implements RecentlyViewedProduct {
 
-    private static RecentlyViewedProductsService instance;
+    private static HttpSessionRecentlyViewedProduct instance;
 
-    private static final String RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE = RecentlyViewedProductsService.class.getName();
+    private static final String RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE = HttpSessionRecentlyViewedProduct.class.getName();
 
     private ProductDao productDao;
 
-    public static RecentlyViewedProductsService getInstance() {
+    public static HttpSessionRecentlyViewedProduct getInstance() {
         if (instance == null) {
-            instance = new RecentlyViewedProductsService();
+            instance = new HttpSessionRecentlyViewedProduct();
         }
         return instance;
     }
 
-    private RecentlyViewedProductsService() {
+    private HttpSessionRecentlyViewedProduct() {
         productDao = ArrayListProductDao.getInstance();
     }
 

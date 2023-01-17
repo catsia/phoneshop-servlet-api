@@ -35,7 +35,7 @@ public class CartServiceTest {
 
     @Before
     public void setup() {
-        cartService = CartServiceImp.getInstance();
+        cartService = HttpSessionCartService.getInstance();
         productDao = ArrayListProductDao.getInstance();
         cart = new Cart();
 
