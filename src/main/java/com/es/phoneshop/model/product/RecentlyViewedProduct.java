@@ -6,5 +6,5 @@ import java.util.List;
 public interface RecentlyViewedProduct {
     List<Product> getRecentlyViewedProducts(HttpServletRequest request);
 
-    void addViewedProduct(List<Product> recentlyViewedProducts, Long productId);
+    void addViewedProduct(HttpServletRequest request, Long productId);
 }

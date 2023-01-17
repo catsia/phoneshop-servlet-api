@@ -35,16 +35,19 @@ public class RecentlyViewedProductsService implements RecentlyViewedProduct {
     }
 
     @Override
-    public void addViewedProduct(List<Product> recentlyViewedProducts, Long productId) {
-        Optional<Product> product = recentlyViewedProducts.stream().filter(products -> products.getId().equals(productId)).findAny();
-        if (product.isPresent()) {
-            Collections.swap(recentlyViewedProducts, recentlyViewedProducts.size() - 1, recentlyViewedProducts.indexOf(product.get()));
-            return;
+    public void addViewedProduct(HttpServletRequest request, Long productId) {
+        synchronized (request.getSession()) {
+            List<Product> recentlyViewedProducts = getRecentlyViewedProducts(request);
+            Optional<Product> product = recentlyViewedProducts.stream().filter(products -> products.getId().equals(productId)).findAny();
+            if (product.isPresent()) {
+                Collections.swap(recentlyViewedProducts, recentlyViewedProducts.size() - 1, recentlyViewedProducts.indexOf(product.get()));
+                return;
+            }
+            if (recentlyViewedProducts.size() == 3) {
+                recentlyViewedProducts.remove(0);
+            }
+            recentlyViewedProducts.add(productDao.getProduct(productId));
         }
-        if (recentlyViewedProducts.size() == 3) {
-            recentlyViewedProducts.remove(0);
-        }
-        recentlyViewedProducts.add(productDao.getProduct(productId));
     }
 
 

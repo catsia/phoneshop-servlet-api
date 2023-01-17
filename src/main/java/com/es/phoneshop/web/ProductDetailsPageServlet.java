@@ -37,14 +37,14 @@ public class ProductDetailsPageServlet extends HttpServlet {
         request.setAttribute("product", productDao.getProduct(productId));
         request.setAttribute("cart", cartService.getCart(request).toString());
         request.setAttribute("viewedProducts", recentlyViewedProductsService.getRecentlyViewedProducts(request));
-        recentlyViewedProductsService.addViewedProduct(recentlyViewedProductsService.getRecentlyViewedProducts(request), productId);
+        recentlyViewedProductsService.addViewedProduct(request, productId);
         request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int quantity;
-        String message = "";
+        String message;
         String productId = request.getPathInfo().substring(1);
         try {
             quantity = NumberFormat
