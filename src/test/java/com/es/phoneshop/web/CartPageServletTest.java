@@ -18,13 +18,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Currency;
-import java.util.Locale;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProductListPageServletTest {
+public class CartPageServletTest {
     @Mock
     private HttpServletRequest request;
     @Mock
@@ -37,19 +37,20 @@ public class ProductListPageServletTest {
     @Mock
     private HttpSession session;
 
-    private ProductListPageServlet servlet = new ProductListPageServlet();
+    private CartPageServlet servlet = new CartPageServlet();
 
     @Before
     public void setup() throws ServletException {
         servlet.init(config);
+        String[] strings = new String[1];
+        strings[0] = "1";
+
+        when(request.getParameterValues(anyString())).thenReturn(strings);
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
-
-        when(request.getParameter("productId")).thenReturn("1");
-
-        when(request.getLocale()).thenReturn(Locale.getDefault());
         when(request.getSession()).thenReturn(session);
+
         ProductDao productDao = ArrayListProductDao.getInstance();
-        Currency currency = java.util.Currency.getInstance("USD");
+        Currency currency = Currency.getInstance("USD");
         Product product = new Product(1L, "test", "HTC EVO Shift 4G", new BigDecimal(320), currency, 3, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/HTC/HTC%20EVO%20Shift%204G.jpg");
         productDao.save(product);
     }
@@ -58,14 +59,29 @@ public class ProductListPageServletTest {
     public void testDoGet() throws ServletException, IOException {
         servlet.doGet(request, response);
 
-        verify(request).getRequestDispatcher(eq("/WEB-INF/pages/productList.jsp"));
+        verify(request).getRequestDispatcher(eq("/WEB-INF/pages/cart.jsp"));
         verify(requestDispatcher).forward(request, response);
-        verify(request).setAttribute(eq("products"), any());
+        verify(request).setAttribute(eq("cart"), any());
+        verify(request).setAttribute(eq("errors"), any());
     }
 
     @Test
     public void testDoPost() throws ServletException, IOException {
-        when(request.getParameter("quantity")).thenReturn("1");
+        servlet.doPost(request, response);
+
+        verify(response).sendRedirect(anyString());
+    }
+
+    @Test
+    public void testDoPostNegativeQuantity() throws IOException, ServletException {
+        String[] stringsIds = new String[1];
+        stringsIds[0] = "1";
+
+        String[] stringsQuantities = new String[1];
+        stringsQuantities[0] = "-1";
+
+        when(request.getParameterValues("productId")).thenReturn(stringsIds);
+        when(request.getParameterValues("quantity")).thenReturn(stringsQuantities);
 
         servlet.doPost(request, response);
 
@@ -73,14 +89,18 @@ public class ProductListPageServletTest {
     }
 
     @Test
-    public void testDoPostNegativeQuantity() throws IOException {
-        when(request.getParameter("quantity")).thenReturn("-1");
-        verify(response, never()).sendRedirect(anyString());
-    }
+    public void testDoPostNonNumberQuantity() throws IOException, ServletException {
+        String[] stringsIds = new String[1];
+        stringsIds[0] = "1";
 
-    @Test
-    public void testDoPostNonNumberQuantity() throws IOException {
-        when(request.getParameter("quantity")).thenReturn("not number");
-        verify(response, never()).sendRedirect(anyString());
+        String[] stringsQuantities = new String[1];
+        stringsQuantities[0] = "not number";
+
+        when(request.getParameterValues("productId")).thenReturn(stringsIds);
+        when(request.getParameterValues("quantity")).thenReturn(stringsQuantities);
+
+        servlet.doPost(request, response);
+
+        verify(response).sendRedirect(anyString());
     }
 }

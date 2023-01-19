@@ -4,8 +4,8 @@ import com.es.phoneshop.model.cart.CartService;
 import com.es.phoneshop.model.cart.HttpSessionCartService;
 import com.es.phoneshop.model.cart.OutOfStockException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
-import com.es.phoneshop.model.product.ProductDao;
 import com.es.phoneshop.model.product.HttpSessionRecentlyViewedProduct;
+import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

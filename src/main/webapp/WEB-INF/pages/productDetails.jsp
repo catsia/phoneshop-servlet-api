@@ -8,9 +8,11 @@
   <p>
     Product ${product.description}
   </p>
+  <a href="${pageContext.servletContext.contextPath}/cart">
   <p>
     Cart: ${cart}
   </p>
+  </a>
    <c:if test = "${not empty param.message and empty error}">
       <div class = "success">
           ${param.message}

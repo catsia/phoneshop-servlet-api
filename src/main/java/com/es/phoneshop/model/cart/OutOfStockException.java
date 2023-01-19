@@ -1,6 +1,6 @@
 package com.es.phoneshop.model.cart;
 
-public class OutOfStockException extends Exception{
+public class OutOfStockException extends Exception {
     private int stock;
 
     public OutOfStockException(int stock) {
