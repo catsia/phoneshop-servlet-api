@@ -39,10 +39,11 @@ public class HttpSessionCartService implements CartService {
             Product product = productDao.getProduct(productId);
             List<CartItem> cartItems = getMatchingCartItem(cart, productId);
             if (cartItems.size() == 1) {
+                CartItem cartItem = cartItems.get(0);
                 if (quantity > product.getStock()) {
                     throw new OutOfStockException(product.getStock());
                 }
-                cartItems.get(0).setQuantity(quantity);
+                cartItem.setQuantity(quantity);
             }
             calculateTotalCost(cart);
             calculateTotalQuantity(cart);
@@ -56,10 +57,11 @@ public class HttpSessionCartService implements CartService {
             Product product = productDao.getProduct(productId);
             List<CartItem> cartItems = getMatchingCartItem(cart, productId);
             if (cartItems.size() == 1) {
-                if (cartItems.get(0).getQuantity() + quantity > product.getStock()) {
+                CartItem cartItem = cartItems.get(0);
+                if (cartItem.getQuantity() + quantity > product.getStock()) {
                     throw new OutOfStockException(product.getStock());
                 }
-                cartItems.get(0).setQuantity(cartItems.get(0).getQuantity() + quantity);
+                cartItem.setQuantity(cartItem.getQuantity() + quantity);
             } else {
                 if (quantity > product.getStock()) {
                     throw new OutOfStockException(product.getStock());
@@ -88,19 +90,16 @@ public class HttpSessionCartService implements CartService {
     }
 
     private void calculateTotalCost(Cart cart) {
-        BigDecimal totalCost = new BigDecimal(0);
-        for (CartItem cartItem : cart.getCartItems()) {
-            totalCost = totalCost.add(cartItem.getProduct().getPrice()
-                    .multiply(BigDecimal.valueOf(cartItem.getQuantity())));
-        }
+        BigDecimal totalCost = cart.getCartItems().stream()
+                .map(cartItem -> cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         cart.setTotalCost(totalCost);
     }
 
     private void calculateTotalQuantity(Cart cart) {
-        int totalQuantity = 0;
-        for (CartItem cartItem : cart.getCartItems()) {
-            totalQuantity += cartItem.getQuantity();
-        }
+        int totalQuantity = cart.getCartItems().stream()
+                .mapToInt(CartItem::getQuantity)
+                .sum();
         cart.setTotalQuantity(totalQuantity);
     }
 }

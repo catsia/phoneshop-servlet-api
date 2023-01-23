@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class MiniCartServlet extends HttpServlet {
     private CartService cartService;
@@ -21,8 +22,11 @@ public class MiniCartServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("totalQuantity", cartService.getCart(request).getTotalQuantity());
-        request.setAttribute("totalCost", cartService.getCart(request).getTotalCost() != null ? cartService.getCart(request).getTotalCost() : 0);
+        BigDecimal totalCost = cartService.getCart(request).getTotalCost();
+        int totalQuantity = cartService.getCart(request).getTotalQuantity();
+
+        request.setAttribute("totalQuantity", totalQuantity);
+        request.setAttribute("totalCost", totalCost != null ? totalCost : 0);
         request.getRequestDispatcher("/WEB-INF/pages/miniCart.jsp").include(request, response);
     }
 }

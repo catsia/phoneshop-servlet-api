@@ -12,6 +12,8 @@ public class Cart implements Serializable {
 
     private BigDecimal totalCost;
 
+    private static final long serialVersionUID = 3L;
+
     public int getTotalQuantity() {
         return totalQuantity;
     }

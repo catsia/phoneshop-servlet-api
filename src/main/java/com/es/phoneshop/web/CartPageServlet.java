@@ -38,8 +38,14 @@ public class CartPageServlet extends HttpServlet {
         List<Integer> quantities = new ArrayList<>();
         List<Long> productIds = new ArrayList<>();
         errors = new HashMap<>();
+        String[] productId = request.getParameterValues("productId");
+        String[] quantity = request.getParameterValues("quantity");
 
-        if (request.getParameterValues("productId").length == 0 && request.getParameterValues("quantity").length == 0) {
+        if (quantity.length != productId.length) {
+            request.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(request, response);
+            return;
+        }
+        if (productId.length == 0) {
             doGet(request, response);
             return;
         }

@@ -10,6 +10,8 @@ public class CartItem implements Serializable {
 
     private int quantity;
 
+    private static final long serialVersionUID = 22342L;
+
     public CartItem(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;

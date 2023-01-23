@@ -19,18 +19,20 @@ public class Product implements Serializable {
     private Currency currency;
     private int stock;
     private String imageUrl;
-
     private Map<Date, BigDecimal> priceHistory;
+
+    private static final long serialVersionUID = 173827L;
 
     public Map<Date, BigDecimal> getPriceHistory() {
         return priceHistory;
     }
 
-    public void setPriceHistory(Map<Date, BigDecimal> priceHistory) {
+    public void setPriceHistory(HashMap<Date, BigDecimal> priceHistory) {
         this.priceHistory = priceHistory;
     }
 
     public Product() {
+        priceHistory = new HashMap<>();
     }
 
     public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
@@ -52,6 +54,7 @@ public class Product implements Serializable {
         this.currency = currency;
         this.stock = stock;
         this.imageUrl = imageUrl;
+        this.priceHistory = new HashMap<>();
     }
 
     public Long getId() {
@@ -111,7 +114,7 @@ public class Product implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    private void putPriceHistory(BigDecimal price){
+    private void putPriceHistory(BigDecimal price) {
         DateFormat dateFormat = DateFormat.getDateInstance();
         Calendar cals = Calendar.getInstance();
         Date date = cals.getTime();
