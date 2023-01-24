@@ -1,4 +1,4 @@
-package com.es.phoneshop.web;
+package com.es.phoneshop.web.pages;
 
 import org.junit.Before;
 import org.junit.Test;
