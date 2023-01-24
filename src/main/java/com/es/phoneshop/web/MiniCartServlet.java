@@ -26,7 +26,7 @@ public class MiniCartServlet extends HttpServlet {
         int totalQuantity = cartService.getCart(request).getTotalQuantity();
 
         request.setAttribute("totalQuantity", totalQuantity);
-        request.setAttribute("totalCost", totalCost != null ? totalCost : 0);
+        request.setAttribute("totalCost", totalCost);
         request.getRequestDispatcher("/WEB-INF/pages/miniCart.jsp").include(request, response);
     }
 }
