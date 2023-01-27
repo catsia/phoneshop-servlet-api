@@ -5,7 +5,6 @@ import com.es.phoneshop.model.cart.HttpSessionCartService;
 import com.es.phoneshop.model.cart.OutOfStockException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.HttpSessionRecentlyViewedProduct;
-import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -17,7 +16,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 public class ProductDetailsPageServlet extends HttpServlet {
-    private ProductDao productDao;
+    private ArrayListProductDao productDao;
 
     private CartService cartService;
 
@@ -34,7 +33,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Long productId = Long.valueOf(request.getPathInfo().substring(1));
-        request.setAttribute("product", productDao.getProduct(productId));
+        request.setAttribute("product", productDao.getValue(productId));
         request.setAttribute("cart", cartService.getCart(request).toString());
         request.setAttribute("viewedProducts", httpSessionRecentlyViewedProduct.getRecentlyViewedProducts(request));
         httpSessionRecentlyViewedProduct.addViewedProduct(request, productId);

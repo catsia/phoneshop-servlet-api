@@ -2,7 +2,6 @@ package com.es.phoneshop.model.cart;
 
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 public class HttpSessionCartService implements CartService {
     private static final String CART_SESSION_ATTRIBUTE = HttpSessionCartService.class.getName() + ".cart";
     private static HttpSessionCartService instance;
-    private final ProductDao productDao = ArrayListProductDao.getInstance();
+    private final ArrayListProductDao productDao = ArrayListProductDao.getInstance();
 
     public static HttpSessionCartService getInstance() {
         if (instance == null) {
@@ -36,7 +35,7 @@ public class HttpSessionCartService implements CartService {
     public void update(HttpServletRequest request, Long productId, int quantity) throws OutOfStockException {
         synchronized (request.getSession()) {
             Cart cart = getCart(request);
-            Product product = productDao.getProduct(productId);
+            Product product = productDao.getValue(productId);
             List<CartItem> cartItems = getMatchingCartItem(cart, productId);
             if (cartItems.size() == 1) {
                 CartItem cartItem = cartItems.get(0);
@@ -54,7 +53,7 @@ public class HttpSessionCartService implements CartService {
     public void add(HttpServletRequest request, Long productId, int quantity) throws OutOfStockException {
         synchronized (request.getSession()) {
             Cart cart = getCart(request);
-            Product product = productDao.getProduct(productId);
+            Product product = productDao.getValue(productId);
             List<CartItem> cartItems = getMatchingCartItem(cart, productId);
             if (cartItems.size() == 1) {
                 CartItem cartItem = cartItems.get(0);
@@ -78,6 +77,16 @@ public class HttpSessionCartService implements CartService {
         synchronized (request.getSession()) {
             Cart cart = getCart(request);
             cart.getCartItems().removeIf(cartItem -> productId != null && productId.equals(cartItem.getProduct().getId()));
+            calculateTotalCost(cart);
+            calculateTotalQuantity(cart);
+        }
+    }
+
+    @Override
+    public void deleteAll(HttpServletRequest request) {
+        synchronized (request.getSession()) {
+            Cart cart = getCart(request);
+            cart.getCartItems().clear();
             calculateTotalCost(cart);
             calculateTotalQuantity(cart);
         }

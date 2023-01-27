@@ -12,7 +12,7 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 public class ArrayListProductDaoTest {
-    private ProductDao productDao;
+    private ArrayListProductDao productDao;
     Product product;
 
     @Before
@@ -69,18 +69,18 @@ public class ArrayListProductDaoTest {
 
     public void testGetExistingProducts() {
         productDao.save(product);
-        assertEquals("test", productDao.getProduct(product.getId()).getCode());
+        assertEquals("test", productDao.getValue(product.getId()).getCode());
     }
 
     @Test(expected = NoSuchElementException.class)
     public void testGetNonExistingProducts() {
         productDao.save(product);
-        productDao.getProduct(product.getId() + 1);
+        productDao.getValue(product.getId() + 1);
     }
 
     @Test(expected = NoSuchElementException.class)
     public void testGetProductNullId() {
-        productDao.getProduct(null);
+        productDao.getValue(null);
     }
 
     @Test
@@ -89,13 +89,13 @@ public class ArrayListProductDaoTest {
         productDao.save(product);
         product.setCode("test-product");
         productDao.save(product);
-        assertEquals("test-product", productDao.getProduct(product.getId()).getCode());
+        assertEquals("test-product", productDao.getValue(product.getId()).getCode());
     }
 
     @Test
     public void testSaveNewProduct() {
         productDao.save(product);
-        assertEquals(product.getCode(), productDao.getProduct(product.getId()).getCode());
+        assertEquals(product.getCode(), productDao.getValue(product.getId()).getCode());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -107,7 +107,7 @@ public class ArrayListProductDaoTest {
     public void testDeleteExistingProduct() {
         productDao.save(product);
         productDao.delete(product.getId());
-        productDao.getProduct(product.getId());
+        productDao.getValue(product.getId());
     }
 
     @Test

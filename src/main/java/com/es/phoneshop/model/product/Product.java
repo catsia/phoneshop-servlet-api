@@ -1,11 +1,13 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.model.generics.Identifiable;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.*;
 
-public class Product implements Serializable {
+public class Product implements Serializable, Identifiable {
     private Long id;
     private String code;
     private String description;

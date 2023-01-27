@@ -9,7 +9,7 @@ public class HttpSessionRecentlyViewedProduct implements RecentlyViewedProduct {
 
     private static final String RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE = HttpSessionRecentlyViewedProduct.class.getName();
 
-    private ProductDao productDao;
+    private ArrayListProductDao productDao;
 
     public static HttpSessionRecentlyViewedProduct getInstance() {
         if (instance == null) {
@@ -46,7 +46,7 @@ public class HttpSessionRecentlyViewedProduct implements RecentlyViewedProduct {
             if (recentlyViewedProducts.size() == 3) {
                 recentlyViewedProducts.remove(0);
             }
-            recentlyViewedProducts.add(productDao.getProduct(productId));
+            recentlyViewedProducts.add(productDao.getValue(productId));
         }
     }
 

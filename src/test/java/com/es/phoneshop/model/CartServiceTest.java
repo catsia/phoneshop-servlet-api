@@ -3,7 +3,6 @@ package com.es.phoneshop.model;
 import com.es.phoneshop.model.cart.*;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.product.ProductDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +28,7 @@ public class CartServiceTest {
 
     private Product product;
 
-    private ProductDao productDao;
+    private ArrayListProductDao productDao;
 
     @Mock
     HttpServletRequest request;
@@ -118,5 +117,9 @@ public class CartServiceTest {
         assertEquals(size, cart.getCartItems().size());
     }
 
-
+    @Test
+    public void testDeleteAll() {
+        cartService.deleteAll(request);
+        assertEquals(0, cart.getCartItems().size());
+    }
 }

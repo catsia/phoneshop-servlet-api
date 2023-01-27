@@ -1,0 +1,15 @@
+package com.es.phoneshop.model.order;
+
+import com.es.phoneshop.model.cart.Cart;
+
+import java.util.List;
+
+public interface OrderService {
+    Order getOrder(Cart cart);
+
+    Order getOrderById(Long id);
+
+    List<PaymentMethod> getPaymentMethods();
+
+    void saveOrder(Order order);
+}
