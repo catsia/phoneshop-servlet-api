@@ -5,11 +5,11 @@ import com.es.phoneshop.model.generics.GenericDao;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-public class ArrayListOrderDao extends GenericDao<Order> implements OrderDao{
+public class ArrayListOrderDao extends GenericDao<Order> implements OrderDao {
 
-    private static ArrayListOrderDao instance;
+    private static OrderDao instance;
 
-    public static synchronized ArrayListOrderDao getInstance() {
+    public static synchronized OrderDao getInstance() {
         if (instance == null) {
             instance = new ArrayListOrderDao();
         }

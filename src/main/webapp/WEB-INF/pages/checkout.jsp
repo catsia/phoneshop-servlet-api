@@ -100,19 +100,8 @@
              <tags:orderRowError name="lastName" label="Last name" order="${order}" errors="${errors}"/>
              <tags:orderRowError name="phoneNumber" label="Phone number" order="${order}" errors="${errors}"/>
              <tags:orderRowError name="address" label="Address" order="${order}" errors="${errors}"/>
-             <tr>
-                <td>Delivery date<span style="color:red">*</span></td>
-                <td>
+             <tags:orderRowError name="orderDate" label="Delivery date" order="${order}" errors="${errors}" isDate="true"/>
 
-                  <input name="orderDate" type="date" value="${not empty errors ? param[orderDate] : order[orderDate]}"/>
-                  <c:if test="${not empty errors['orderDate']}">
-                     <div class="error">
-                        ${errors['orderDate']}
-                     </div>
-                  </c:if>
-                  </td>
-                  </tr>
-             <tr>
                 <td>Payment method<span style="color:red">*</span></td>
                 <td>
                    <select name="paymentMethods">

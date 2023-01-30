@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class DosFilter implements Filter {
 
-    DosProtectionService dosProtectionService;
+    private DosProtectionService dosProtectionService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

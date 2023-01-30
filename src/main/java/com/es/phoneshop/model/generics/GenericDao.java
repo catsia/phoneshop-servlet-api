@@ -3,10 +3,9 @@ package com.es.phoneshop.model.generics;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public abstract class GenericDao <T extends Identifiable> {
-    protected List<T> values;
+public abstract class GenericDao<T extends Identifiable> {
     protected final Object lock = new Object();
-
+    protected List<T> values;
     protected long maxId;
 
 

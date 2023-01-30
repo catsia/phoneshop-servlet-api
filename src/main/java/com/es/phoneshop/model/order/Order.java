@@ -80,6 +80,7 @@ public class Order extends Cart implements Identifiable {
     }
 
     public String getOrderDate() {
+        if (orderDate == null) return "";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return simpleDateFormat.format(orderDate);
     }

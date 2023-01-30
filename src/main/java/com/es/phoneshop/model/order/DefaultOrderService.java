@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class DefaultOrderService implements OrderService {
     private static OrderService instance;
 
-    private ArrayListOrderDao orderDao;
+    private OrderDao orderDao;
 
     private final Object lock = new Object();
 
@@ -31,15 +31,15 @@ public class DefaultOrderService implements OrderService {
     public Order getOrder(Cart cart) {
         synchronized (lock) {
             Order order = new Order();
-            final CartItem[] cartItem = new CartItem[1];
             order.setCartItems(cart.getCartItems().stream()
                     .map(item -> {
+                        CartItem cartItem;
                         try {
-                            cartItem[0] = (CartItem) item.clone();
+                            cartItem = (CartItem) item.clone();
                         } catch (CloneNotSupportedException e) {
                             throw new RuntimeException();
                         }
-                        return cartItem[0];
+                        return cartItem;
                     }).collect(Collectors.toList()));
             order.setSubTotal(cart.getTotalCost());
             order.setDeliveryCost(calculateDeliveryCost(order.getSubTotal()));

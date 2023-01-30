@@ -2,6 +2,7 @@ package com.es.phoneshop.model;
 
 import com.es.phoneshop.model.order.ArrayListOrderDao;
 import com.es.phoneshop.model.order.Order;
+import com.es.phoneshop.model.order.OrderDao;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ import java.util.NoSuchElementException;
 import static org.junit.Assert.assertEquals;
 
 public class ArrayListOrderDaoTest {
-    private ArrayListOrderDao orderDao;
+    private OrderDao orderDao;
     private Order order;
 
     @Before

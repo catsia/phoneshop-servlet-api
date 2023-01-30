@@ -2,6 +2,7 @@ package com.es.phoneshop.model.cart;
 
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 public class HttpSessionCartService implements CartService {
     private static final String CART_SESSION_ATTRIBUTE = HttpSessionCartService.class.getName() + ".cart";
     private static HttpSessionCartService instance;
-    private final ArrayListProductDao productDao = ArrayListProductDao.getInstance();
+    private final ProductDao productDao = ArrayListProductDao.getInstance();
 
     public static HttpSessionCartService getInstance() {
         if (instance == null) {

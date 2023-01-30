@@ -5,6 +5,7 @@ import com.es.phoneshop.model.cart.HttpSessionCartService;
 import com.es.phoneshop.model.cart.OutOfStockException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.HttpSessionRecentlyViewedProduct;
+import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -16,7 +17,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 public class ProductDetailsPageServlet extends HttpServlet {
-    private ArrayListProductDao productDao;
+    private ProductDao productDao;
 
     private CartService cartService;
 

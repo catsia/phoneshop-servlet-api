@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 
 public class OrderOverviewPageServlet extends HttpServlet {
 
-    private ArrayListOrderDao orderDao;
+    private OrderDao orderDao;
 
     @Override
     public void init(ServletConfig config) throws ServletException {

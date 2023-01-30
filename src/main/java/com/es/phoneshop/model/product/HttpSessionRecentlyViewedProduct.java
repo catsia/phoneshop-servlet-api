@@ -9,7 +9,7 @@ public class HttpSessionRecentlyViewedProduct implements RecentlyViewedProduct {
 
     private static final String RECENTLY_VIEWED_PRODUCTS_ATTRIBUTE = HttpSessionRecentlyViewedProduct.class.getName();
 
-    private ArrayListProductDao productDao;
+    private ProductDao productDao;
 
     public static HttpSessionRecentlyViewedProduct getInstance() {
         if (instance == null) {

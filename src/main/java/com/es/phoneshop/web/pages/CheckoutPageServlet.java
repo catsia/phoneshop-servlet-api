@@ -25,6 +25,8 @@ public class CheckoutPageServlet extends HttpServlet {
 
     private OrderService orderService;
 
+    private Order order;
+
     private Map<String, String> errors;
 
     @Override
@@ -37,9 +39,11 @@ public class CheckoutPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Cart cart = cartService.getCart(request);
-
+        if (order == null) {
+            order = orderService.getOrder(cart);
+        }
         request.setAttribute("errors", errors);
-        request.setAttribute("order", orderService.getOrder(cart));
+        request.setAttribute("order", order);
         request.setAttribute("paymentMethods", orderService.getPaymentMethods());
         request.getRequestDispatcher("/WEB-INF/pages/checkout.jsp").forward(request, response);
     }
@@ -51,7 +55,7 @@ public class CheckoutPageServlet extends HttpServlet {
         if (cart.getCartItems().isEmpty()) {
             errors.put("cart", "Your cart is empty");
         }
-        Order order = orderService.getOrder(cart);
+        order = orderService.getOrder(cart);
         setRequiredAttribute(request, "firstName", order::setFirstName, null);
         setRequiredAttribute(request, "lastName", order::setLastName, null);
         setRequiredAttribute(request, "phoneNumber", order::setPhoneNumber, "^\\+\\d+$");
@@ -66,10 +70,7 @@ public class CheckoutPageServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/order/overview/" + order.getSecureId());
 
         } else {
-            request.setAttribute("errors", errors);
-            request.setAttribute("order", order);
-            request.setAttribute("paymentMethods", orderService.getPaymentMethods());
-            request.getRequestDispatcher("/WEB-INF/pages/checkout.jsp").forward(request, response);
+            doGet(request, response);
         }
     }
 

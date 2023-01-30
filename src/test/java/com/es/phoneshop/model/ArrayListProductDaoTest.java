@@ -12,7 +12,7 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 public class ArrayListProductDaoTest {
-    private ArrayListProductDao productDao;
+    private ProductDao productDao;
     Product product;
 
     @Before

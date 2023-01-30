@@ -3,6 +3,7 @@ package com.es.phoneshop.model;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.HttpSessionRecentlyViewedProduct;
 import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.product.ProductDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.when;
 public class RecentlyViewedProductsTest {
     private HttpSessionRecentlyViewedProduct httpSessionRecentlyViewedProduct;
 
-    private ArrayListProductDao productDao;
+    private ProductDao productDao;
 
     private List<Product> products;
 

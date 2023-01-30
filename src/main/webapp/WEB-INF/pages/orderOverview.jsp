@@ -93,7 +93,6 @@
                 </tr>
   </table>
 
-  <form method="post">
        <table class ="table">
           <tbody>
              <tags:orderRow name="firstName" label="First name" order="${order}"/>
@@ -116,11 +115,6 @@
              </tr>
           </tbody>
        </table>
-    <button type="submit">Submit</button>
-    </form>
-
-
-
 
    <tags:footer />
 

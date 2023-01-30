@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 
 public class ArrayListProductDao extends GenericDao<Product> implements ProductDao{
 
-    private static ArrayListProductDao instance;
+    private static ProductDao instance;
 
-    public static synchronized ArrayListProductDao getInstance() {
+    public static synchronized ProductDao getInstance() {
         if (instance == null) {
             instance = new ArrayListProductDao();
         }
