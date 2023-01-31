@@ -58,7 +58,7 @@ public class CheckoutPageServlet extends HttpServlet {
         order = orderService.getOrder(cart);
         setRequiredAttribute(request, "firstName", order::setFirstName, null);
         setRequiredAttribute(request, "lastName", order::setLastName, null);
-        setRequiredAttribute(request, "phoneNumber", order::setPhoneNumber, "^\\+\\d+$");
+        setRequiredAttribute(request, "phoneNumber", order::setPhoneNumber, "^\\+\\d{12}$");
         setRequiredAttribute(request, "address", order::setAddress, null);
         setOrderDate(request, order);
         order.setPaymentMethod(PaymentMethod.valueOf(request.getParameter("paymentMethods")));

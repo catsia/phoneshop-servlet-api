@@ -98,7 +98,7 @@
           <tbody>
              <tags:orderRowError name="firstName" label="First name" order="${order}" errors="${errors}"/>
              <tags:orderRowError name="lastName" label="Last name" order="${order}" errors="${errors}"/>
-             <tags:orderRowError name="phoneNumber" label="Phone number" order="${order}" errors="${errors}" placeholder="+xxxxxxxxxxxxxx"/>
+             <tags:orderRowError name="phoneNumber" label="Phone number" order="${order}" errors="${errors}" placeholder="+375xxxxxxxxxxx"/>
              <tags:orderRowError name="address" label="Address" order="${order}" errors="${errors}"/>
              <tags:orderRowError name="orderDate" label="Delivery date" order="${order}" errors="${errors}" isDate="true"/>
 

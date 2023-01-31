@@ -56,7 +56,9 @@ public class DefaultOrderService implements OrderService {
     @Override
     public void saveOrder(Order order) {
         synchronized (lock) {
-            if (order == null) return;
+            if (order == null) {
+                return;
+            }
             order.setSecureId(UUID.randomUUID().toString());
             orderDao.save(order);
         }
