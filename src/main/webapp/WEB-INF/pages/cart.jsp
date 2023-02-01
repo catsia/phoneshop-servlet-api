@@ -68,8 +68,13 @@
   <button>
     Update
   </button>
- </form>
 
+ </form>
+ <form action="${pageContext.servletContext.contextPath}/checkout">
+  <button>
+      Order
+ </button>
+  </form>
  <form id="deleteCartItem" method="post"/>
 
    <tags:footer />

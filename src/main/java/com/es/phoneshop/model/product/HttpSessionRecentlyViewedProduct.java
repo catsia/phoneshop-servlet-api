@@ -46,7 +46,7 @@ public class HttpSessionRecentlyViewedProduct implements RecentlyViewedProduct {
             if (recentlyViewedProducts.size() == 3) {
                 recentlyViewedProducts.remove(0);
             }
-            recentlyViewedProducts.add(productDao.getProduct(productId));
+            recentlyViewedProducts.add(productDao.getValue(productId));
         }
     }
 

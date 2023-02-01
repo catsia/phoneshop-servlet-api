@@ -2,7 +2,6 @@ package com.es.phoneshop.web.pages;
 
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.product.ProductDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,10 +46,10 @@ public class ProductDetailsPageServletTest {
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         when(request.getLocale()).thenReturn(Locale.getDefault());
         when(request.getSession()).thenReturn(session);
-        ProductDao productDao = ArrayListProductDao.getInstance();
+
         Currency currency = java.util.Currency.getInstance("USD");
         Product product = new Product(1L, "test", "HTC EVO Shift 4G", new BigDecimal(320), currency, 3, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/HTC/HTC%20EVO%20Shift%204G.jpg");
-        productDao.save(product);
+        ArrayListProductDao.getInstance().save(product);
 
     }
 

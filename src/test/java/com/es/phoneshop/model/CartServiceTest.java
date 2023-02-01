@@ -118,5 +118,9 @@ public class CartServiceTest {
         assertEquals(size, cart.getCartItems().size());
     }
 
-
+    @Test
+    public void testDeleteAll() {
+        cartService.deleteAll(request);
+        assertEquals(0, cart.getCartItems().size());
+    }
 }

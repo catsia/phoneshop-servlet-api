@@ -36,7 +36,7 @@ public class HttpSessionCartService implements CartService {
     public void update(HttpServletRequest request, Long productId, int quantity) throws OutOfStockException {
         synchronized (request.getSession()) {
             Cart cart = getCart(request);
-            Product product = productDao.getProduct(productId);
+            Product product = productDao.getValue(productId);
             List<CartItem> cartItems = getMatchingCartItem(cart, productId);
             if (cartItems.size() == 1) {
                 CartItem cartItem = cartItems.get(0);
@@ -54,7 +54,7 @@ public class HttpSessionCartService implements CartService {
     public void add(HttpServletRequest request, Long productId, int quantity) throws OutOfStockException {
         synchronized (request.getSession()) {
             Cart cart = getCart(request);
-            Product product = productDao.getProduct(productId);
+            Product product = productDao.getValue(productId);
             List<CartItem> cartItems = getMatchingCartItem(cart, productId);
             if (cartItems.size() == 1) {
                 CartItem cartItem = cartItems.get(0);
@@ -78,6 +78,16 @@ public class HttpSessionCartService implements CartService {
         synchronized (request.getSession()) {
             Cart cart = getCart(request);
             cart.getCartItems().removeIf(cartItem -> productId != null && productId.equals(cartItem.getProduct().getId()));
+            calculateTotalCost(cart);
+            calculateTotalQuantity(cart);
+        }
+    }
+
+    @Override
+    public void deleteAll(HttpServletRequest request) {
+        synchronized (request.getSession()) {
+            Cart cart = getCart(request);
+            cart.getCartItems().clear();
             calculateTotalCost(cart);
             calculateTotalQuantity(cart);
         }
