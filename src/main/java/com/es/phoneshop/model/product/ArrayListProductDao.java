@@ -2,11 +2,14 @@ package com.es.phoneshop.model.product;
 
 import com.es.phoneshop.model.generics.GenericDao;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ArrayListProductDao extends GenericDao<Product> implements ProductDao{
+public class ArrayListProductDao extends GenericDao<Product> implements ProductDao {
 
     private static ProductDao instance;
 
@@ -31,6 +34,29 @@ public class ArrayListProductDao extends GenericDao<Product> implements ProductD
                     .filter(product -> splitQuery.isEmpty() || splitQuery.stream().anyMatch(product.getDescription().toLowerCase()::contains))
                     .sorted(sortField == null ? generateComparatorForQuery(splitQuery) : generateComparatorForFieldAndOrder(sortField, sortOrder))
                     .collect(Collectors.toList());
+        }
+    }
+
+    @Override
+    public List<Product> findProductsWithPriceRange(String query, SearchCriteria searchCriteria, BigDecimal minPrice, BigDecimal maxPrice) {
+        synchronized (lock) {
+            List<String> splitQuery = splitQuery(query);
+            return values.stream().filter(product -> product.getPrice() != null)
+                    .filter(product -> product.getStock() > 0)
+                    .filter(product -> splitQuery.isEmpty() || searchWithCriteria(product, searchCriteria, splitQuery))
+                    .filter(product -> maxPrice == null || product.getPrice().compareTo(maxPrice) < 0)
+                    .filter(product -> minPrice == null || product.getPrice().compareTo(minPrice) > 0)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    private boolean searchWithCriteria(Product product, SearchCriteria searchCriteria, List<String> query) {
+        if (searchCriteria == SearchCriteria.ALL_WORDS) {
+            return query.stream().allMatch(product.getDescription().toLowerCase()::contains);
+        } else if (searchCriteria == SearchCriteria.ANY_WORD) {
+            return query.stream().anyMatch(product.getDescription().toLowerCase()::contains);
+        } else {
+            return true;
         }
     }
 
